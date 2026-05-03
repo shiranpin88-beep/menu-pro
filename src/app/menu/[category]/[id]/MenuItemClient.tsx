@@ -2,7 +2,6 @@
 
 import { useState, useRef } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { MenuItem, MenuCategory } from '@/lib/types'
 
@@ -66,6 +65,7 @@ export default function MenuItemClient({
   const color = categoryColors[category]
   const [imgIndex, setImgIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [navigating, setNavigating] = useState(false)
   const touchStartX = useRef(0)
 
   function handleTouchStart(e: React.TouchEvent) {
@@ -187,11 +187,12 @@ export default function MenuItemClient({
         <div className="flex items-start justify-between gap-3 mb-2">
           <h1 className="text-2xl font-bold leading-snug" style={{ color: '#f5f0e8' }}>{item.name}</h1>
           {isAdmin && (
-            <Link href={`/admin/menu/${item.id}/edit?category=${category}`}
+            <button
+              onClick={() => { setNavigating(true); router.push(`/admin/menu/${item.id}/edit?category=${category}`) }}
               className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium mt-1"
-              style={{ background: '#c4722a22', color: '#c4722a', border: '1px solid #c4722a44' }}>
-              ✏️ עריכה
-            </Link>
+              style={{ background: '#c4722a22', color: '#c4722a', border: '1px solid #c4722a44', opacity: navigating ? 0.6 : 1 }}>
+              {navigating ? '...' : '✏️ עריכה'}
+            </button>
           )}
         </div>
 
